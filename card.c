@@ -1,9 +1,9 @@
 /************************************************************************************
-*·¢ËÍ0x01Ö¸Áî£¬µãÁÁLED1
-*·¢ËÍ0x02Ö¸Áî£¬µãÁÁLED2
-*·¢ËÍ0x03Ö¸Áî£¬µãÁÁLED3
-*·¢ËÍ0x04Ö¸Áî£¬µãÁÁLED4
-*·¢ËÍ0xffÖ¸Áî£¬Á÷Ë®µÆ
+*å‘é€0x01æŒ‡ä»¤ï¼Œç‚¹äº®LED1
+*å‘é€0x02æŒ‡ä»¤ï¼Œç‚¹äº®LED2
+*å‘é€0x03æŒ‡ä»¤ï¼Œç‚¹äº®LED3
+*å‘é€0x04æŒ‡ä»¤ï¼Œç‚¹äº®LED4
+*å‘é€0xffæŒ‡ä»¤ï¼Œæµæ°´ç¯
 *************************************************************************************/
 
 #include<reg52.h>
@@ -21,26 +21,26 @@
 	sbit led6 = P1^5;
 	sbit led7 = P1^6;
 	sbit led8 = P1^7;
-void delay(unit xms)//ÑÓÊ±º¯Êı
+void delay(unit xms)//å»¶æ—¶å‡½æ•°
 {
 	unit i,j;
 	for(i=xms;i>0;i--)
 		for(j=122;j>0;j--);
 }
-void UsartConfiguration()//´®¿Ú²ÎÊıÅäÖÃº¯Êı
+void UsartConfiguration()//ä¸²å£å‚æ•°é…ç½®å‡½æ•°
 {
-	SCON = 0X50;	//ÉèÖÃÎª¹¤×÷·½Ê½1
-	TMOD = 0X20;	//ÉèÖÃ¼ÆÊıÆ÷¹¤×÷·½Ê½2
-	PCON = 0X00;	//SMOD=0,32·ÖÆµ
-	TH1 = 0Xfd;		//¼ÆÊıÆ÷³õÊ¼ÖµÉèÖÃ£¬²¨ÌØÂÊÎª9600bit/s
+	SCON = 0X50;	//è®¾ç½®ä¸ºå·¥ä½œæ–¹å¼1
+	TMOD = 0X20;	//è®¾ç½®è®¡æ•°å™¨å·¥ä½œæ–¹å¼2
+	PCON = 0X00;	//SMOD=0,32åˆ†é¢‘
+	TH1 = 0Xfd;		//è®¡æ•°å™¨åˆå§‹å€¼è®¾ç½®ï¼Œæ³¢ç‰¹ç‡ä¸º9600bit/s
 	TL1 = 0Xfd;
-	ES = 1;			//´ò¿ª½ÓÊÕÖĞ¶Ï
-	EA = 1;			//´ò¿ª×ÜÖĞ¶Ï
-	TR1 = 1;		//´ò¿ª¼ÆÊıÆ÷
+	ES = 1;			//æ‰“å¼€æ¥æ”¶ä¸­æ–­
+	EA = 1;			//æ‰“å¼€æ€»ä¸­æ–­
+	TR1 = 1;		//æ‰“å¼€è®¡æ•°å™¨
 }
 
 
-void ControlLED(unsigned char* a)//µÆ¿Øº¯Êı
+void ControlLED(unsigned char* a)//ç¯æ§å‡½æ•°
 {
 	if(a[12] == 0x84&a[13] == 0x36)
 	{
@@ -48,20 +48,20 @@ void ControlLED(unsigned char* a)//µÆ¿Øº¯Êı
 	}
 }
 
-void main()//Ö÷º¯Êı
+void main()//ä¸»å‡½æ•°
 {
 	UsartConfiguration();
 	while(1);	
 }       
 
-void Uart() interrupt 4	//´®¿ÚÖĞ¶Ïº¯Êı
+void Uart() interrupt 4	//ä¸²å£ä¸­æ–­å‡½æ•°
 {
 	static unsigned char date;
 	date = 	SBUF;
 	RI = 0;
 	if(date == 0x7F)
 	{
-			Cmd.ReceivePoint = 0;		
+		Cmd.ReceivePoint = 0;		
 	}
 	Cmd.ReceiveBuffer[Cmd.ReceivePoint++] = date;
 	if(Cmd.ReceivePoint == 14)
